@@ -1,31 +1,13 @@
 import psycopg2
 import config
+from VolunteerManager import Manager
 
-class MyVolonteer():
+class MyVolunteer():
     def __init__(self,chat_id):
         self.chat_id = chat_id
         
     def run_query(self,query):
-        try:
-            connection = psycopg2.connect(
-                host=config.HOSTNAME,
-                user=config.USERNAME,
-                password=config.PASSWORD,
-                dbname=config.DATABASE,
-                port=config.PORT
-            )
-            cursor = connection.cursor()
-            cursor.execute(query)
-            connection.commit()
-        
-
-        except psycopg2.Error as e:
-            print('Error connecting', e)
-
-        finally:
-            if connection:
-                cursor.close()
-                connection.close()
+        Manager.run_query(query, False)
 
     def save(self):
         query = f"INSERT INTO our_volunteers(chat_id) VALUES('{self.chat_id}')"

@@ -4,20 +4,21 @@ import config
 class Manager:
 
     @staticmethod
-    def run_query(query):
+    def run_query(query, fetch=True):
+        connection = None
         try:
             connection = psycopg2.connect(
                 host=config.HOSTNAME,
                 user=config.USERNAME,
                 password=config.PASSWORD,
                 dbname=config.DATABASE,
-                port=config.PORT
             )
             cursor = connection.cursor()
             cursor.execute(query)
             connection.commit()
-            result = cursor.fetchall()
-            return result
+            if fetch:
+                result = cursor.fetchall()
+                return result
 
         except psycopg2.Error as e:
             print('Error connecting', e)
@@ -34,5 +35,5 @@ class Manager:
     
     @classmethod
     def all(cls):
-        query = f"SELECT * FROM our_volunteers"
+        query = f"SELECT chat_id FROM our_volunteers"
         print (cls.run_query(query))
