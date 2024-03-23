@@ -3,13 +3,13 @@ import psycopg2
 from googleapiclient.discovery import build
 
 class Comments:
-    def __init__(self):
+    def __init__(self, video_id):
         self.bad_words = set(['kike', 'shylock', 'coloniser', 'colonizer', 'from the river to the sea', 'zionazi', 'hitler', 'holocaust', 'rothschild', 'lehi', 'ethnic cleansing'])
-        self.video_id = 'lJYn09tuPw4'
+        self.video_id = video_id
 
-    def persist_to_database(self, comment, author_name, comment_id):
-        query = f"""INSERT INTO comments(text, author, comment_id)
-                VALUES ('{comment}', '{author_name}', '{comment_id}')"""
+    def persist_to_database(self, comment, author_name, comment_id, potentially_antisemitic = False):
+        query = f"""INSERT INTO comments(text, author, comment_id, potentially_antisemitic)
+                VALUES ('{comment}', '{author_name}', '{comment_id}', {potentially_antisemitic})"""
         
         self.run_query(query)
 
@@ -28,6 +28,8 @@ class Comments:
                 replycount = item['snippet']['totalReplyCount']
 
                 if any(word in comment for word in self.bad_words):
+                    self.persist_to_database(comment, author_name, comment_id, True)
+                else:
                     self.persist_to_database(comment, author_name, comment_id)
         
             if replycount > 0 and 'replies' in item:
@@ -37,8 +39,10 @@ class Comments:
                         reply_author_name = reply['snippet']['authorDisplayName']
                         reply_id = reply['id']
                         if any(word in reply_text for word in self.bad_words):
-                            self.persist_to_database(reply_text, reply_author_name, reply_id)
-
+                            self.persist_to_database(reply_text, reply_author_name, reply_id, True)
+                        else:
+                            self.persist_to_database(comment, author_name, comment_id)
+                        
             if 'nextPageToken' in video_response:
                 video_response = youtube.commentThreads().list(
                     part='snippet,replies',
@@ -57,5 +61,5 @@ class Comments:
         cursor.close
           
 
-comments = Comments()
+comments = Comments('lJYn09tuPw4')
 comments.video_comments()

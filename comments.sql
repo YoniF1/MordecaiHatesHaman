@@ -10,3 +10,5 @@ CREATE TABLE comments(
 )
 
 SELECT * FROM comments;
+
+DROP TABLE comments;
