@@ -4,7 +4,7 @@ from googleapiclient.discovery import build
 
 class Comments:
     def __init__(self, video_id):
-        self.bad_words = set(['kike', 'shylock', 'coloniser', 'colonizer', 'from the river to the sea', 'zionazi', 'hitler', 'holocaust', 'rothschild', 'lehi', 'ethnic cleansing'])
+        self.bad_words = set(['kike', 'shylock', 'coloniser', 'colonizer', 'from the river to the sea', 'zionazi', 'hitler', 'holocaust', 'rothschild', 'ethnic cleansing', 'terrorists'])
         self.video_id = video_id
 
     def persist_to_database(self, comment, author_name, video_id, comment_id, potentially_antisemitic = False):
@@ -72,6 +72,6 @@ class Comments:
         return result
 
     
-# comments = Comments('lJYn09tuPw4')
-# comments.video_comments()
+comments = Comments('8klRQ-zCVm4')
+comments.video_comments()
 # comments.find_bad_comments()
