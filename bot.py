@@ -53,6 +53,7 @@ class Bot:
             if user_id not in self.user_comment_index:
                 self.user_comment_index[user_id] = 0 
         self.send_bad_comment(user_id, self.user_comment_index[user_id])
+        self.user_comment_index[user_id] += 1
         bot.send_message(callback.message.chat.id, 'Let\'s do another comment!')
 
     def send_bad_comment(self, chat_id, comment_index):
