@@ -21,4 +21,3 @@ class MyVolunteer():
         query = f"UPDATE our_volunteers SET chat_id = '{new_chat_id}'WHERE chat_id = '{self.chat_id}' "
         return self.run_query(query)
     
-

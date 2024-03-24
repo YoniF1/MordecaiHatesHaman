@@ -13,4 +13,6 @@ CREATE TABLE comments(
 
 SELECT * FROM comments;
 
+TRUNCATE TABLE comments;
+
 SELECT * FROM comments WHERE potentially_antisemitic=True
